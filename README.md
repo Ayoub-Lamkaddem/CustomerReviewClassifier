@@ -78,7 +78,7 @@ Create a **.env** file in the root of your project with the following structure:
     LABEL_ENCODER_PATH=../ml/artifacts/LabelEncoder.pkl
 
     ### MySQL configuration
-    
+
     MYSQL_USER=your_mysql_username
 
     MYSQL_PASSWORD=your_mysql_password
@@ -109,7 +109,7 @@ cd frontend
     source .venv/bin/activate
 
 # Run the frontend
-        streamlit run app.py
+    streamlit run app.py
 ```
 
 -**backend folder**(open another terminal)
