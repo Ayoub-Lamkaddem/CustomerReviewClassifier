@@ -19,3 +19,6 @@ def get_db_session():
     Session_Local =  sessionmaker(autocommit=False, autoflush=False, bind=engine)
     return Session_Local
     
+
+    #  docker exec -it mysql_doccontainer mysql -u user -p
+    

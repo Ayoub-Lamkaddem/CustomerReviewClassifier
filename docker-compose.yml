@@ -9,25 +9,9 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: userpassword
     ports:
-      - "3307:3306"   # Tu exposes MySQL sur 3307 côté hôte
+      - "3307:3306"  # MySQL exposé côté hôte
     volumes:
       - db_data:/var/lib/mysql
-
-  backend:
-    build: ./backend
-    container_name: backend
-    ports:
-      - "8000:8000"
-    depends_on:
-      - db
-
-  frontend:
-    build: ./frontend
-    container_name: frontend
-    depends_on:
-      - backend
-    ports:
-      - "8501:8501"
 
 volumes:
   db_data:

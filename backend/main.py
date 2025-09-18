@@ -73,4 +73,4 @@ def predict(input: TextInput):
     }
 
 
-# uvicorn backend:app --reload
+# uvicorn main:app --reload
