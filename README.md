@@ -61,30 +61,36 @@ cd ..
 ```
 ### 4 - Configure the .env file
 Create a **.env** file in the root of your project with the following structure:
-### Backend URL
-BACK_END_URL=http://localhost:8000
 
-### Machine Learning Models
-BERT_MODEL_PATH=../ml/models/fine_tuning_bert/BERT_LORA
+```.env
+    ### Backend URL
 
-SGD_MODEL_PATH=../ml/models/sgd_model/SGD.pkl
+    BACK_END_URL=http://localhost:8000
 
-TFIDF_PATH=../ml/artifacts/TfidfVectorizer.pkl
+    ### Machine Learning Models
 
-LABEL_ENCODER_PATH=../ml/artifacts/LabelEncoder.pkl
+    BERT_MODEL_PATH=../ml/models/fine_tuning_bert/BERT_LORA
 
-### MySQL configuration
-MYSQL_USER=your_mysql_username
+    SGD_MODEL_PATH=../ml/models/sgd_model/SGD.pkl
 
-MYSQL_PASSWORD=your_mysql_password
+    TFIDF_PATH=../ml/artifacts/TfidfVectorizer.pkl
 
-MYSQL_HOST=localhost
+    LABEL_ENCODER_PATH=../ml/artifacts/LabelEncoder.pkl
 
-MYSQL_PORT=your_mysql_port
+    ### MySQL configuration
+    
+    MYSQL_USER=your_mysql_username
 
-MYSQL_DATABASE=your_database_name
+    MYSQL_PASSWORD=your_mysql_password
 
-MYSQL_ROOT_PASSWORD=your_mysql_root_password
+    MYSQL_HOST=localhost
+
+    MYSQL_PORT=your_mysql_port
+
+    MYSQL_DATABASE=your_database_name
+
+    MYSQL_ROOT_PASSWORD=your_mysql_root_password
+```
 
 ### 5- Build and start the necessary Docker containers
 Make sure your .env file is configured, then run:
