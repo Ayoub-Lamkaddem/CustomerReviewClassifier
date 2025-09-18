@@ -112,7 +112,7 @@ cd frontend
     streamlit run app.py
 ```
 
--**backend folder**(open another terminal)
+- **backend folder**(open another terminal)
 ```bash
 cd backend
 # Windows
