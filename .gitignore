@@ -15,3 +15,4 @@ data/archive.zip
 data/Dataset_User_Agreement.pdf
 
 .env
+.env.docker
