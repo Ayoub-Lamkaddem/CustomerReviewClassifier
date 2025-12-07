@@ -21,4 +21,4 @@ def get_db_session():
     
 
     #  docker exec -it mysql_doccontainer mysql -u user -p
-    # docker exec -it mysql_doccontainer mysql -u admin -padmin123
+   
