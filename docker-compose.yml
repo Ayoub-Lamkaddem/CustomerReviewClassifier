@@ -9,9 +9,62 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
-      - "${MYSQL_PORT}:3306"  # MySQL exposé côté hôte
+      - "${MYSQL_PORT}:3306"
     volumes:
       - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend_container
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      BERT_MODEL_PATH: /app/ml/models/fine_tuning_bert/BERT_LORA
+      SGD_MODEL_PATH: /app/ml/artifacts/sgd_model.pkl
+      TFIDF_PATH: /app/ml/artifacts/TfidfVectorizer.pkl
+      LABEL_ENCODER_PATH: /app/ml/artifacts/LabelEncoder.pkl
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./ml:/app/ml:ro
+      - huggingface-cache:/root/.cache/huggingface
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend_container
+    restart: always
+    ports:
+      - "8501:8501"
+    environment:
+      BACK_END_URL: http://localhost:8000
+    depends_on:
+      - backend
+    networks:
+      - app-network
 
 volumes:
   db_data:
+  huggingface-cache:
+
+networks:
+  app-network:
+    driver: bridge

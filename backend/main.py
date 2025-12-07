@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from transformers import BertTokenizer, BertForSequenceClassification
+from peft import PeftModel, PeftConfig
 from database import get_db_session
 from sqlalchemy import text as sql_text
 import torch
@@ -15,9 +16,29 @@ load_dotenv()
 # Load Models:
 bert_model_path = os.getenv('BERT_MODEL_PATH')
 num_labels = 3
-bert_model = BertForSequenceClassification.from_pretrained(bert_model_path, num_labels=num_labels, local_files_only=True)
+
+# Charger le modèle BERT avec LoRA
+print(f"📥 Chargement du modèle LoRA depuis: {bert_model_path}")
+try:
+    # Lire la config de l'adaptateur pour trouver le modèle de base
+    peft_config = PeftConfig.from_pretrained(bert_model_path)
+    base_model_name = peft_config.base_model_name_or_path
+    
+    print(f"📥 Chargement du modèle de base: {base_model_name}")
+    # Charger le modèle de base (téléchargement auto si nécessaire)
+    base_model = BertForSequenceClassification.from_pretrained(base_model_name, num_labels=num_labels)
+    
+    # Charger l'adaptateur LoRA
+    bert_model = PeftModel.from_pretrained(base_model, bert_model_path)
+    bert_model.eval()
+    print(" Modèle BERT LoRA chargé avec succès")
+except Exception as e:
+    print(f"  Erreur lors du chargement avec LoRA, tentative sans LoRA: {e}")
+    # Fallback: essayer de charger comme modèle normal
+    bert_model = BertForSequenceClassification.from_pretrained(bert_model_path, num_labels=num_labels, local_files_only=True)
+    bert_model.eval()
+
 bert_tokenizer = BertTokenizer.from_pretrained(bert_model_path, local_files_only=True)
-bert_model.eval()
 
 sgd_model_path = os.getenv('SGD_MODEL_PATH')
 sgd_model = joblib.load(sgd_model_path)
